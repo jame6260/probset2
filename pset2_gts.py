@@ -3,16 +3,33 @@
 # Warning: Please refrain from using global variables! Your solution will be checked
 # by importing your function, not from the raw input/output.
 
-def count_gts_sequences(k: int, p2moves: str, ...) -> int:
-    # TO-DO
+def count_gts_sequences(k, p2moves, roundsLeft, numP1, numP2, original, totSeq) -> int:
+    p1moves = ['G', 'T', 'S']
+    if (roundsLeft == 0):       
+        if (numP1 > numP2):
+            totSeq.append(numP1)
+        p2moves = original
+        roundsLeft = k
+        numP1 = numP2 = 0
+        return
+
+    for j in range(len(p1moves)):
+        x = beats(p1moves[j], p2moves[0])
+        if (x == 1):
+            count_gts_sequences(k, p2moves[1:], roundsLeft-1, numP1+1, numP2, original, totSeq)
+        elif (x == 2):   
+            count_gts_sequences(k, p2moves[1:], roundsLeft-1, numP1, numP2+1, original, totSeq)
+        else:
+            count_gts_sequences(k, p2moves[1:], roundsLeft-1, numP1, numP2, original, totSeq)
+    return len(totSeq)
 
 def gts_wrapper(k: int, p2moves: str) -> int:
-    # TO-DO: modify this by "seeding" your initial recursive call
-    return count_gts_sequences(k, p2moves, ...)
+    roundsLeft = k
+    numP1 = numP2 = 0
+    original = p2moves
+    totSeq = []
+    return count_gts_sequences(k, p2moves, roundsLeft, numP1, numP2, original, totSeq)
 
-
-# DON'T TOUCH the code below
-# you can use this helper function for your solution:
 def beats(p1, p2):
     '''
     Given the moves of p1 and p2, it returns:
